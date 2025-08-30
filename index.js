@@ -1,7 +1,4 @@
 
-const baseUrl = "http://site.api.espn.com/apis/site/v2/sports/football/nfl"
-const currentWeek = () => `${baseUrl}/scoreboard`;
-const scoreForWeek = (seasonType, weekNo) => `${baseUrl}/scoreboard?seasontype=${seasonType}&week=${weekNo}`;
 
 // const columnObj = {
 //     home: "home",
