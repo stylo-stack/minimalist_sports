@@ -11,51 +11,15 @@
 //     link: "link"
 // }
 
-const gamesTableBody = document.getElementById("games-table-body");
-const createRow = (columns, title) => {
-    const row = document.createElement("tr");
-    row.scope = "row"
-    if (title) {
-        row.classList.add("thead-light")
-    }
-    for (const [key, column] of Object.entries(columns)) {
-        const cell = document.createElement(title ? "th" : "td");
-        cell.classList.add("align-middle")
-        if (key === "link") {
-            const a = document.createElement("a");
-            a.href = column;
-            a.textContent = "See game"
-            a.target = "_blank"
-            cell.appendChild(a)
-        } else {
-            cell.textContent = column;
-        }
-
-        row.appendChild(cell);
-    }
-    return row;
-}
+const gamesTableBody = document.getElementById("games-table");
 
 const loadGames = async (games) => {
     gamesTableBody.replaceChildren([document.createElement("a")]);
     for await (const game of games) {
-        const homeTeam = game.getHomeTeam();
-        const awayTeam = game.getAwayTeam();
-        const titleObject = {
-            home: homeTeam.team.displayName,
-            away: awayTeam.team.displayName,
-            date: game.getDateString(),
-            time: game.getTimeString(),
-        }
-        const gameObject = {
-            score: game.getScoreString(),
-            period: game.getPeriodString(),
-            clock: game.getClockString(),
-            link: game.link,
-        }
-        const row = createRow(titleObject, true);
-        gamesTableBody.appendChild(row)
-        gamesTableBody.appendChild(createRow(gameObject))
+        const controller = new NflGameController(game);
+        const display = controller.getGameDisplay();
+        console.log({display})
+        gamesTableBody.appendChild(display)
     }
 }
 
@@ -86,7 +50,6 @@ const getSpecificWeek = async (weekNumber, weekType) => {
 
 function onLoad() {
     const { weekNumber, weekType } = getWeekNumberAndType();
-    console.log({ weekNumber, weekType, d: "onload" })
     if (weekNumber) {
         getSpecificWeek(weekNumber, weekType ?? 2)
     } else {

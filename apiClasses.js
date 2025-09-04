@@ -94,7 +94,6 @@ class League {
 /** Wrapper for a game / event. */
 class EspnEvent {
     constructor(raw) {
-        console.log(raw)
         this.id = raw.id;
         this.uid = raw.uid;
         this.date = new Date(raw.date);
@@ -106,9 +105,9 @@ class EspnEvent {
         this.link = raw.links[0]?.href
     }
 
-    getGameStatus = () => {
+    getGameStatus = () => this.competition.getStatus();
 
-    }
+    getIsBefore = () => this.getGameStatus() === "pre"
 
     getHomeTeam = () => this.competition.competitors.find(it => it.homeAway === "home")
 
@@ -116,7 +115,7 @@ class EspnEvent {
 
 
     getDateString = () => this.competition.date.toLocaleString('fr-FR', {
-        weekday: 'short',
+        weekday: 'long',
         month: '2-digit',
         day: '2-digit',
     });
@@ -127,14 +126,20 @@ class EspnEvent {
         minute: '2-digit'
     });
 
-
-    getScoreString = () => {
-        if(this.competition.getStatus() === "pre"){
-            return "- : -"
-        }
+    getScore = () => {
         const { score: homeScore } = this.getHomeTeam();
         const { score: awayScore } = this.getAwayTeam();
+        return {
+            homeScore,
+            awayScore
+        }
+    }
 
+    getScoreString = () => {
+        if (this.competition.getStatus() === "pre") {
+            return "- : -"
+        }
+        const {homeScore, awayScore} = this.getScore();
         return `${homeScore} : ${awayScore}`
     }
 
@@ -167,11 +172,11 @@ class Competition {
      * - `"live"`: Game is ongoing
      * - `"end"`: Game is over
      */
-    getStatus = () =>{
-        if(this.status.pre){
+    getStatus = () => {
+        if (this.status.pre) {
             return "pre"
         }
-        if(this.status.completed){
+        if (this.status.completed) {
             return "end"
         }
         return "live"
@@ -182,8 +187,8 @@ class Competition {
 class Status {
     getPeriodString = (period, completed, before) => {
         const str = ""
-        if(before){
-            return "- -"
+        if (before) {
+            return "Pregame"
         }
         if (completed) {
             return "Final"
@@ -200,7 +205,7 @@ class Status {
         const before = raw.type.state === "pre";
         const completed = raw.type.completed;
         this.clock = raw.clock;
-        this.displayClock = before ? "- -" : raw.displayClock;
+        this.displayClock = raw.displayClock;
         this.isTBDFlex = raw.isTBDFlex;
         this.period = raw.period;
         this.periodString = this.getPeriodString(raw.period, completed, before);

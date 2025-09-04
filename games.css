@@ -1,0 +1,31 @@
+.game-wrapper{
+    margin: 1rem;
+    flex: 1;
+    align-content: space-between;
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+.game-component{
+    justify-content: space-evenly;
+    text-align: center;
+}
+
+.team{
+    width: 45%;
+}
+
+.team-logo{
+    height: 40%;
+    width: 40%;
+}
+
+.team-name{
+    font-size: 1.25rem;
+    font-weight: 600;    
+}
+
+.score-line{
+    width: 80%;
+    margin: auto;
+}
