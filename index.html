@@ -18,16 +18,116 @@
 </head>
 
 <body>
-    <div>
-        <h1>NFL</h1>
-        <div class="overflow-scroll">
-            <table class="table table-sm table-hover w-100">
-                <thead id="weeks-table"></thead>
-            </table>
+
+    <div class="container container-fluid link-container">
+    <section class="">
+        <div class="d-flex flex-row">
+        <!-- AFC East -->
+        <div >
+            <label class="text-muted">AFC East</label>
+            <div class="d-flex flex-wrap">
+                <a href="#2" class="btn btn-outline-primary btn-sm m-1 text-center">BUF</a>
+                <a href="#15" class="btn btn-outline-primary btn-sm m-1 text-center">MIA</a>
+                <a href="#17" class="btn btn-outline-primary btn-sm m-1 text-center">NE</a>
+                <a href="#20" class="btn btn-outline-primary btn-sm m-1 text-center">NYJ</a>
+            </div>
         </div>
-        <div class="container container-fluid justify-content-center d-flex flex-column" id="games-table">
+
+        <!-- AFC North -->
+        <div >
+            <label class="text-muted">AFC North</label>
+            <div class="d-flex flex-wrap">
+                <a href="#4" class="btn btn-outline-primary btn-sm m-1 text-center">CIN</a>
+                <a href="#5" class="btn btn-outline-primary btn-sm m-1 text-center">CLE</a>
+                <a href="#23" class="btn btn-outline-primary btn-sm m-1 text-center">PIT</a>
+                <a href="#33" class="btn btn-outline-primary btn-sm m-1 text-center">BAL</a>
+            </div>
+        </div>
+
+        <!-- AFC South -->
+        <div >
+            <label class="text-muted">AFC South</label>
+            <div class="d-flex flex-wrap">
+                <a href="#10" class="btn btn-outline-primary btn-sm m-1 text-center">TEN</a>
+                <a href="#11" class="btn btn-outline-primary btn-sm m-1 text-center">IND</a>
+                <a href="#30" class="btn btn-outline-primary btn-sm m-1 text-center">JAX</a>
+                <a href="#34" class="btn btn-outline-primary btn-sm m-1 text-center">HOU</a>
+            </div>
+        </div>
+
+        <!-- AFC West -->
+        <div >
+            <label class="text-muted">AFC West</label>
+            <div class="d-flex flex-wrap">
+                <a href="#7" class="btn btn-outline-primary btn-sm m-1 text-center">DEN</a>
+                <a href="#12" class="btn btn-outline-primary btn-sm m-1 text-center">KC</a>
+                <a href="#13" class="btn btn-outline-primary btn-sm m-1 text-center">LV</a>
+                <a href="#24" class="btn btn-outline-primary btn-sm m-1 text-center">LAC</a>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <!-- NFC -->
+    <section>
+        <div class="d-flex flex-row">
+            <!-- NFC East -->
+            <div >
+                <label class="text-muted">NFC East</label>
+                <div class="d-flex flex-wrap">
+                    <a href="#6" class="btn btn-outline-primary btn-sm m-1 text-center">DAL</a>
+                    <a href="#19" class="btn btn-outline-primary btn-sm m-1 text-center">NYG</a>
+                    <a href="#21" class="btn btn-outline-primary btn-sm m-1 text-center">PHI</a>
+                    <a href="#28" class="btn btn-outline-primary btn-sm m-1 text-center">WSH</a>
+                </div>
+            </div>
+
+            <!-- NFC North -->
+            <div >
+                <label class="text-muted">NFC North</label>
+                <div class="d-flex flex-wrap">
+                    <a href="#3" class="btn btn-outline-primary btn-sm m-1 text-center">CHI</a>
+                    <a href="#8" class="btn btn-outline-primary btn-sm m-1 text-center">DET</a>
+                    <a href="#9" class="btn btn-outline-primary btn-sm m-1 text-center">GB</a>
+                    <a href="#16" class="btn btn-outline-primary btn-sm m-1 text-center">MIN</a>
+                </div>
+            </div>
+
+            <!-- NFC South -->
+            <div >
+                <label class="text-muted">NFC South</label>
+                <div class="d-flex flex-wrap">
+                    <a href="#1" class="btn btn-outline-primary btn-sm m-1 text-center">ATL</a>
+                    <a href="#18" class="btn btn-outline-primary btn-sm m-1 text-center">NO</a>
+                    <a href="#27" class="btn btn-outline-primary btn-sm m-1 text-center">TB</a>
+                    <a href="#29" class="btn btn-outline-primary btn-sm m-1 text-center">CAR</a>
+                </div>
+            </div>
+
+            <!-- NFC West -->
+            <div >
+                <label class="text-muted">NFC West</label>
+                <div class="d-flex flex-wrap">
+                    <a href="#14" class="btn btn-outline-primary btn-sm m-1 text-center">LAR</a>
+                    <a href="#22" class="btn btn-outline-primary btn-sm m-1 text-center">ARI</a>
+                    <a href="#25" class="btn btn-outline-primary btn-sm m-1 text-center">SF</a>
+                    <a href="#26" class="btn btn-outline-primary btn-sm m-1 text-center">SEA</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    </div>
+        <div class="container container-fluid d-flex flex-row m-auto align-items-end justify-content-between">
+        <h1 class="display-1">NFL</h1>
+        <div>
+            <select id="week-select"></select>
+            <option value="" disabled selected hidden></option>
+            </select>
         </div>
     </div>
+    <div class="container container-fluid justify-content-center d-flex flex-column" id="games-table">
+    </div>
+
 </body>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
     integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
@@ -36,12 +136,13 @@
     integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
     crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
-    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    integrity="sha384-JZR6SpejlabelU02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
     crossorigin="anonymous"></script>
 <script src="./consts.js"></script>
 <script src="./apiClasses.js"></script>
-<script src="./populateLinks.js"></script>
 <script src="./htmlControllers.js"></script>
+<script src="./populateLinks.js"></script>
+
 <script src="./index.js"></script>
 
 

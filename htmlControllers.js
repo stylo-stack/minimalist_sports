@@ -7,19 +7,19 @@ const createElement = (tag, ...classList) => {
 }
 
 const createGradient = (startHex, endHex) => {
-  const normalize = hex => hex.replace(/^#/, '').padStart(6, '0').slice(0, 6);
-  const opacityHex = '94';
+    const normalize = hex => hex.replace(/^#/, '').padStart(6, '0').slice(0, 6);
+    const opacityHex = '94';
 
-  const startWithAlpha = `#${normalize(startHex)}${opacityHex}`;
-  const endWithAlpha   = `#${normalize(endHex)}${opacityHex}`;
-  return `linear-gradient(
+    const startWithAlpha = `#${normalize(startHex)}${opacityHex}`;
+    const endWithAlpha = `#${normalize(endHex)}${opacityHex}`;
+    return `linear-gradient(
     115deg,
     ${startWithAlpha} 0%,
     ${endWithAlpha} 100%
   )`;
 };
 
- 
+
 class NflGameController {
     /**
      * 
@@ -41,6 +41,7 @@ class NflGameController {
         const teamBar = createElement("div", "flex-row", "d-flex", "align-items-center", "game-component");
         const buildTeamElement = ({ team }) => {
             const teamWrapper = createElement("div", "d-flex", "flex-column", "align-items-center", "team");
+            teamWrapper.id = team.id;
             const logoEl = createElement("img", "team-logo");
             logoEl.src = team.logo;
             const nameEl = createElement("p", "team-name");
@@ -102,24 +103,31 @@ class NflGameController {
     }
 }
 
-// #games-table
+class WeekSelectController {
+    constructor(items) {
+        this.items = items;
+    }
 
-// for await (const game of games) {
-//     const homeTeam = game.getHomeTeam();
-//     const awayTeam = game.getAwayTeam();
-//     const titleObject = {
-//         home: homeTeam.team.displayName,
-//         away: awayTeam.team.displayName,
-//         date: game.getDateString(),
-//         time: game.getTimeString(),
-//     }
-//     const gameObject = {
-//         score: game.getScoreString(),
-//         period: game.getPeriodString(),
-//         clock: game.getClockString(),
-//         link: game.link,
-//     }
-//     const row = createRow(titleObject, true);
-//     gamesTableBody.appendChild(row)
-//     gamesTableBody.appendChild(createRow(gameObject))
-// }
+    buildWeekUrl = (type, number) => {
+        const url = new URL(window.location.href);
+        url.searchParams.set(weekType, type);
+        url.searchParams.set(weekNumber, number);
+        return url.toString()
+    }
+
+    populateWeekSelector = () => {
+        const selectEl = document.getElementById("week-select")
+        for (const { name, value} of this.items) {
+            const option = createElement("option");
+            option.textContent = name;
+            option.value = value;
+            selectEl.appendChild(option);
+        }
+        selectEl.addEventListener("change", (e)=> {
+            const [type, number] = e.currentTarget.value.split("-");
+            const url = this.buildWeekUrl(type, number);
+            window.location = url;
+        })
+        return selectEl;
+    }
+}

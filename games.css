@@ -29,3 +29,7 @@
     width: 80%;
     margin: auto;
 }
+
+.link-container a{
+    min-width: 50px !important;
+}
