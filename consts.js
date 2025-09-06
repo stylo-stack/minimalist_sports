@@ -2,6 +2,8 @@ const baseUrl = "https://site.api.espn.com/apis/site/v2/sports/football/nfl"
 const currentWeek = () => `${baseUrl}/scoreboard`;
 const scoreForWeek = (seasonType, weekNo) => `${baseUrl}/scoreboard?seasontype=${seasonType}&week=${weekNo}`;
 
+const summaryUrl = (gameId) =>  `${baseUrl}/summary?event=${gameId}`;
+
 const weekType = "weekType";
 const weekNumber = "weekNumber";
 

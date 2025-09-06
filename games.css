@@ -1,4 +1,4 @@
-.game-wrapper{
+.game-wrapper {
     margin: 1rem;
     flex: 1;
     align-content: space-between;
@@ -6,30 +6,52 @@
     border-radius: 10px;
 }
 
-.game-component{
+.game-wrapper.active {
+    cursor: pointer;
+}
+
+.game-component {
     justify-content: space-evenly;
     text-align: center;
 }
 
-.team{
+.team {
     width: 45%;
 }
 
-.team-logo{
+.team-logo {
     height: 40%;
     width: 40%;
 }
 
-.team-name{
+.team-name {
     font-size: 1.25rem;
-    font-weight: 600;    
+    font-weight: 600;
 }
 
-.score-line{
+.score-line {
     width: 80%;
     margin: auto;
 }
 
-.link-container a{
+.link-container a {
     min-width: 50px !important;
+}
+
+.stats-container {
+    transition: ease-in-out .5s;
+}
+
+.stats-container.active {
+    max-height: 50vh;
+    overflow: scroll;
+    border-top: solid;
+    border-top-color: grey;
+    border-top-width: 1px;
+    padding-top: 10px;
+}
+
+.stats-container.hidden {
+    max-height: 0px;
+    overflow: hidden;
 }

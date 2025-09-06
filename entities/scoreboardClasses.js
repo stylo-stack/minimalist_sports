@@ -258,21 +258,3 @@ class Venue {
         this.indoor = raw.indoor;
     }
 }
-
-/* ------------------------------------------------------------------
-   Example usage (assuming you have the JSON stored in `payload`):
-------------------------------------------------------------------- */
-// const league = new League(payload.leagues[0]);
-// console.log(league.name);                     // "National Football League"
-// console.log(league.season.year);              // 2025
-// console.log(league.getWeek(1)?.label);        // "Preseason"
-// console.log(league.events[0].competitions[0].competitors[0].team.name); // "Eagles"
-
-/* ------------------------------------------------------------------
-   Optional convenience methods you might add later:
-   - League.prototype.upcomingEspnEvents()
-   - EspnEvent.prototype.isLive()
-   - Competition.prototype.winner()
-   - Team.prototype.fullLogoUrl()
-   These can be built on top of the basic structures above.
-------------------------------------------------------------------- */

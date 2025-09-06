@@ -43,4 +43,13 @@ function onLoad() {
     }
 }
 
+async function getGameBoxScore(gameId){
+    const url = summaryUrl(gameId);
+    const res = await fetch(url);
+    const {boxscore: data} = await res.json();
+    const boxScore = new BoxScore(data);
+
+    return boxScore;
+}
+
 onLoad()
