@@ -193,29 +193,6 @@ class NflGameController {
             teamWrapper.appendChild(nameEl)
             return teamWrapper;
         }
-        teamBar.appendChild(buildTeamElement(this.event.getAwayTeam()))
-        teamBar.appendChild(buildTeamElement(this.event.getHomeTeam()))
-        return teamBar;
-    }
-
-    buildDateDisplay = () => {
-        const element = createElement("div", "flex-column", "d-flex", "align-items-center", "game-component");
-        const dateElement = createElement("p");
-        dateElement.textContent = this.event.getDateString();
-        const timeElement = createElement("p");
-        timeElement.textContent = this.event.getTimeString();
-        element.appendChild(dateElement);
-        element.appendChild(timeElement);
-        return element;
-    }
-
-    buildScoreDisplay = () => {
-        const element = createElement("div", "flex-row", "d-flex", "align-items-center", "game-component", "score-line");
-        const { homeScore, awayScore } = this.event.getScore();
-        const awayScoreEl = createElement("p", "display-4");
-        awayScoreEl.textContent = awayScore;
-        const homeScoreEl = createElement("p", "display-4");
-        homeScoreEl.textContent = homeScore;
 
         const clockWrapper = createElement("div");
         const periodEl = createElement("p", "lead");
@@ -225,9 +202,52 @@ class NflGameController {
         clockWrapper.appendChild(periodEl);
         clockWrapper.appendChild(clockEl);
 
-        element.appendChild(awayScoreEl);
-        element.appendChild(clockWrapper);
-        element.appendChild(homeScoreEl);
+        teamBar.appendChild(buildTeamElement(this.event.getAwayTeam()))
+        teamBar.appendChild(clockWrapper);
+        teamBar.appendChild(buildTeamElement(this.event.getHomeTeam()))
+        return teamBar;
+    }
+
+    buildDateDisplay = () => {
+        const element = createElement("div", "flex-column", "d-flex", "align-items-center", "game-component");
+        const dateElement = createElement("p", "fs-5");
+        dateElement.textContent = this.event.getDateString();
+        if (this.event.getIsBefore()) {
+            dateElement.textContent += " " + this.event.getTimeString();
+        }
+        element.appendChild(dateElement);
+        return element;
+    }
+
+    buildScoreDisplay = () => {
+        const element = createElement("div", "flex-row", "d-flex", "game-component", "score-line");
+        const { homeScore, awayScore } = this.event.getScore();
+        const awayScoreWrapper = createElement("div", "d-flex", "flex-row", "score")
+        const awayScoreEl = createElement("p", "display-4");
+        awayScoreEl.textContent = awayScore;
+        //Yeah, I get that this is shit, but I can't figure out why the alignment is off, and I have a day job.
+        console.log({ awayScore })
+        if (Number(awayScore) < 10) {
+            const placeHolder = createElement("p", "display-4", "opacity-0");
+            placeHolder.textContent = "0";
+            awayScoreWrapper.appendChild(placeHolder)
+        }
+        awayScoreWrapper.appendChild(awayScoreEl)
+
+        const homeScoreWrapper = createElement("div", "d-flex", "flex-row", "score")
+        const homeScoreEl = createElement("p", "display-4");
+        homeScoreEl.textContent = homeScore;
+        homeScoreWrapper.appendChild(homeScoreEl)
+        //Yeah, I get that this is shit, but I can't figure out why the alignment is off, and I have a day job.
+        if (Number(homeScore) < 10) {
+            const placeHolder = createElement("p", "display-4", "opacity-0");
+            placeHolder.textContent = "0";
+            homeScoreWrapper.appendChild(placeHolder)
+        }
+
+
+        element.appendChild(awayScoreWrapper);
+        element.appendChild(homeScoreWrapper);
         return element;
     }
 

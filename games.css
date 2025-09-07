@@ -29,9 +29,16 @@
     font-weight: 600;
 }
 
+
 .score-line {
     width: 80%;
     margin: auto;
+}
+
+.score-line .score {
+    flex: 1;
+    display: flex;
+    justify-content: center;
 }
 
 .link-container a {
