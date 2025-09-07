@@ -193,7 +193,7 @@ class Status {
         if (completed) {
             return "Final"
         }
-        if (period > 5) {
+        if (period < 5) {
             return String(period)
         }
         if (period === 5) {
