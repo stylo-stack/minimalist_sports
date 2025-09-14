@@ -51,7 +51,7 @@
 
 .stats-container.active {
     max-height: 50vh;
-    overflow: scroll;
+    overflow-y: scroll;
     border-top: solid;
     border-top-color: grey;
     border-top-width: 1px;

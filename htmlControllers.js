@@ -21,15 +21,15 @@ const createGradient = (startHex, endHex) => {
 
 
 const spinner = (anchor) => {
-    const spinnerSizes = new Array(10).fill(2)
+    const spinnerSizes = new Array(10).fill("")
     const wrapper = createElement("div", "container", "container-fluid", "d-flex", "justify-content-center", "align-items-center", "min-vh-5")
 
     for (const size of spinnerSizes) {
         const spinnerEl = createElement("div", "spinner-grow", "text-primary");
-        spinnerEl.setAttribute("style", `width: ${size}vh; height: ${size}vh;`)
+        spinnerEl.setAttribute("style", `width: ${size}vh; height: ${size}vh; margin: 5px;`)
         spinnerEl.setAttribute("role", "status");
         const spanEl = createElement("span", "sr-only");
-        spanEl.textContent = "Loading…";
+        spanEl.textContent = "";
         spinnerEl.appendChild(spanEl);
         wrapper.appendChild(spinnerEl)
     }
