@@ -9,11 +9,12 @@ class BoxScoreTeamStatistic{
 }
 
 class BoxScoreAthlete{
-    constructor({firstName, lastName, displayName, id}){
+    constructor({firstName, lastName, displayName, id, headshot}){
         this.firstName = firstName;
         this.lastName = lastName;
         this.displayName = displayName;
         this.id = id;
+        this.photo = headshot.href;
     }
 }
 

@@ -6,6 +6,10 @@ const createElement = (tag, ...classList) => {
     return element;
 }
 
+function capitalizeFirstLetter([first = '', ...rest]) {
+    return [first.toUpperCase(), ...rest].join('');
+}
+
 const createGradient = (startHex, endHex) => {
     const normalize = hex => hex.replace(/^#/, '').padStart(6, '0').slice(0, 6);
     const opacityHex = '94';
@@ -42,15 +46,15 @@ const spinner = (anchor) => {
 
 }
 
-class StatsTableController {
+class TeamStatsTableController {
 
     /**
      * @param {string} id
      * @param {BoxScore} boxScore 
      */
     constructor(id, boxScore) {
-        this.tableId = `${id}-stats-table`;
-        this.tableBodyId = `${id}-stats-table-body`;
+        this.tableId = `${id}-team-stats-table`;
+        this.tableBodyId = `${id}-team-stats-table-body`;
 
         const existingTable = document.getElementById(this.tableId);
 
@@ -132,6 +136,140 @@ class StatsTableController {
 
 }
 
+class PlayerStatsTableControllerclass {
+
+    /**
+     * @param {string} id
+     * @param {BoxScore} boxScore 
+     */
+    constructor(id, boxScore) {
+        const wrapperId = `${id}-player-stats-wrapper`;
+
+        const existingWrapper = document.getElementById(wrapperId);
+        if (existingWrapper) {
+            return;
+        }
+
+        const wrapperEl = createElement("div", "stats-container");
+        this.wrapper = wrapperEl;
+        const statTypeNav = createElement("ul", "nav", "nav-pills", "player-stats-nav");
+        const home = {
+            name: boxScore.awayTeam.name,
+            li: createElement("li", "nav-item"),
+            button: createElement("button", "nav-link", "btn-outline"),
+            data: boxScore.awayTeam.playerStatistics,
+        };
+        const away = {
+            name: boxScore.homeTeam.name,
+            li: createElement("li", "nav-item"),
+            button: createElement("button", "nav-link", "btn-outline","active"),
+            data: boxScore.homeTeam.playerStatistics,
+        };
+
+        const clickEvent = (name, data) => (e) => {
+            e.stopPropagation();
+            const active = name === home.name ? home.button : away.button;
+            const inactive = name !== home.name ? home.button : away.button;
+            active.classList.add("active");
+            inactive.classList.remove("active");
+            console.log(data)
+            this.buildTable(data)
+        }
+
+        away.li.appendChild(away.button);
+        away.button.innerText = away.name;
+        away.button.addEventListener("click", clickEvent(away.name, away.data))
+        statTypeNav.appendChild(away.li);
+
+
+        home.li.appendChild(home.button);
+        home.button.innerText = home.name;
+        home.button.addEventListener("click", clickEvent(home.name, home.data))
+        statTypeNav.appendChild(home.li);
+
+        this.wrapper.appendChild(statTypeNav);
+        this.body = createElement("div", "container", "container-fluid");
+        this.wrapper.appendChild(this.body);
+        this.buildTable(away.data)
+    }
+
+    /**
+     * 
+     * @param {PlayerStatisticsGroup} data 
+     */
+    buildTable = (statisticGroup) => {
+        this.body.replaceChildren([]);
+        const table = createElement("table", "table")
+        const tableBody = createElement("tbody");
+        table.appendChild(tableBody);
+
+
+        /**
+         * 
+         * @param {PlayerStatistic} individuals 
+         */
+        const populateIndividuals = (individuals) => {
+            for (const { athlete: { displayName, photo }, stat } of individuals) {
+                const row = createElement("tr");
+                const photoTd = createElement("td", "avatar-col");
+                const photoEl = createElement("img", "avatar");
+                photoEl.src = photo;
+                photoTd.appendChild(photoEl);
+                const nameTd = createElement("td");
+                nameTd.innerText = displayName;
+                const statTd = createElement("td");
+                statTd.innerText = stat;
+                row.appendChild(photoTd)
+                row.appendChild(nameTd);
+                row.appendChild(statTd);
+                tableBody.appendChild(row);
+            }
+        }
+
+        /**
+         * 
+         * @param {PlayerStatistic} statistics
+         */
+        const populateGroup = (statistics) => {
+            for (const { description, total, individualStatistics } of statistics) {
+                const titleRow = createElement("tr");
+                const titleTh = createElement("th");
+                titleTh.innerText = description;
+                titleRow.appendChild(titleTh);
+                if (total) {
+                    const totalTh = createElement("th");
+                    totalTh.innerText = total;
+                    titleRow.appendChild(totalTh);
+                    titleTh.setAttribute("colspan", 2);
+                } else {
+                    titleTh.setAttribute("colspan", 3);
+                }
+                tableBody.appendChild(titleRow)
+                populateIndividuals(individualStatistics);
+            }
+        }
+
+        for (const { name, statistics } of statisticGroup) {
+            const titleRow = createElement("tr");
+            const th = createElement("th", "h5");
+            th.colSpan = 3;
+            th.innerText = capitalizeFirstLetter(name);
+            titleRow.appendChild(th);
+            tableBody.appendChild(titleRow);
+            populateGroup(statistics);
+            const endRow = createElement("tr");
+            tableBody.appendChild(endRow)
+        }
+        this.body.appendChild(table);
+    }
+
+    showData = () => {
+
+    }
+
+    getTables = () => this.wrapper;
+}
+
 const statsActiveClass = "active";
 const statsHiddenClass = "hidden"
 
@@ -143,9 +281,11 @@ class NflGameController {
     constructor(event) {
         this.event = event;
         this.statsContainerId = `${event.id}-stats`
+        this.teamStatsContainerId = `${event.id}-stats-team`;
+        this.playerStatsContainerId = `${event.id}-stats-player`;
     }
 
-    handleStats = async () => {
+    handleLoadAndOpenStats = async () => {
         const elements = document.querySelectorAll(`.stats-container.${statsActiveClass}`);
         const statsContainerEl = document.getElementById(this.statsContainerId);
         const shouldOpenContainer = statsContainerEl.classList.contains(statsHiddenClass)
@@ -162,8 +302,10 @@ class NflGameController {
         const killSpinner = spinner(statsContainerEl);
 
         const boxScoreData = await getGameBoxScore(this.event.id);
-        const tableController = new StatsTableController(this.event.id, boxScoreData)
-        statsContainerEl.appendChild(tableController.getTable())
+        const teamStatsTableController = new TeamStatsTableController(this.event.id, boxScoreData)
+        document.getElementById(this.teamStatsContainerId).appendChild(teamStatsTableController.getTable());
+        const playerStatsTableController = new PlayerStatsTableControllerclass(this.event.id, boxScoreData);
+        document.getElementById(this.playerStatsContainerId).appendChild(playerStatsTableController.getTables());
         killSpinner();
     }
 
@@ -173,7 +315,7 @@ class NflGameController {
         body.id = this.event.id;
         if (!this.event.getIsBefore()) {
             body.addEventListener("click", () => {
-                this.handleStats()
+                this.handleLoadAndOpenStats()
             })
         }
 
@@ -226,7 +368,6 @@ class NflGameController {
         const awayScoreEl = createElement("p", "display-4");
         awayScoreEl.textContent = awayScore;
         //Yeah, I get that this is shit, but I can't figure out why the alignment is off, and I have a day job.
-        console.log({ awayScore })
         if (Number(awayScore) < 10) {
             const placeHolder = createElement("p", "display-4", "opacity-0");
             placeHolder.textContent = "0";
@@ -253,7 +394,50 @@ class NflGameController {
 
     buildStatsDisplay = () => {
         const wrapperEl = createElement("div", "stats-container", "hidden");
+        const statTypeNav = createElement("ul", "nav", "nav-pills");
+        const buildLinkId = (opens) => `${opens}-link`;
+        [
+            {
+                name: "Team Stats",
+                opens: this.teamStatsContainerId,
+                closes: this.playerStatsContainerId,
+                defaultActive: true
+            }, {
+                name: "Player Stats",
+                opens: this.playerStatsContainerId,
+                closes: this.teamStatsContainerId,
+                defaultActive: false
+            }
+        ].forEach(({ name, opens, defaultActive, closes }, index) => {
+            const itemLi = createElement("li", "nav-item");
+            const itemButton = createElement("button", "nav-link");
+            itemButton.id = buildLinkId(opens);
+            if (defaultActive) {
+                itemButton.classList.add("active")
+            }
+            itemButton.innerText = name;
+            itemButton.addEventListener("click", (e) => {
+                e.stopPropagation();//Stop this click from opening/closing the game;
+                document.getElementById(opens).hidden = false;
+                itemButton.classList.add("active");
+                document.getElementById(closes).hidden = true;
+                document.getElementById(buildLinkId(closes)).classList.remove("active")
+            })
+            itemLi.appendChild(itemButton);
+            statTypeNav.appendChild(itemLi);
+        })
+        wrapperEl.appendChild(statTypeNav);
         wrapperEl.id = this.statsContainerId;
+
+        const teamStatsWrapper = createElement("div");
+        teamStatsWrapper.id = this.teamStatsContainerId;
+
+        const playerStatsWrapper = createElement("div");
+        playerStatsWrapper.id = this.playerStatsContainerId;
+        playerStatsWrapper.hidden = true;
+
+        wrapperEl.appendChild(teamStatsWrapper);
+        wrapperEl.appendChild(playerStatsWrapper);
         return wrapperEl;
     }
 
