@@ -14,7 +14,7 @@ class BoxScoreAthlete{
         this.lastName = lastName;
         this.displayName = displayName;
         this.id = id;
-        this.photo = headshot.href;
+        this.photo = headshot?.href;
     }
 }
 

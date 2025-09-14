@@ -143,6 +143,7 @@ class PlayerStatsTableControllerclass {
      * @param {BoxScore} boxScore 
      */
     constructor(id, boxScore) {
+        this.boxScore = boxScore;
         const wrapperId = `${id}-player-stats-wrapper`;
 
         const existingWrapper = document.getElementById(wrapperId);
@@ -162,7 +163,7 @@ class PlayerStatsTableControllerclass {
         const away = {
             name: boxScore.homeTeam.name,
             li: createElement("li", "nav-item"),
-            button: createElement("button", "nav-link", "btn-outline","active"),
+            button: createElement("button", "nav-link", "btn-outline", "active"),
             data: boxScore.homeTeam.playerStatistics,
         };
 
@@ -213,7 +214,7 @@ class PlayerStatsTableControllerclass {
                 const row = createElement("tr");
                 const photoTd = createElement("td", "avatar-col");
                 const photoEl = createElement("img", "avatar");
-                photoEl.src = photo;
+                photoEl.src = photo ? photo : "https://upload.wikimedia.org/wikipedia/fr/thumb/1/12/National_Football_League_2008.svg/langfr-800px-National_Football_League_2008.svg.png";
                 photoTd.appendChild(photoEl);
                 const nameTd = createElement("td");
                 nameTd.innerText = displayName;

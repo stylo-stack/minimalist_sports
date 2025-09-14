@@ -70,6 +70,7 @@
 .avatar-col {
     width: 3rem;
     margin-left: 5rem;
+    text-align: center;
 }
 
 .player-stats-nav {
